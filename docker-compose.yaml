@@ -1,0 +1,22 @@
+services:
+    postgres_test:
+        image: postgres:13
+        container_name: postgres
+        environment:
+            - POSTGRES_USER=admin
+            - POSTGRES_PASSWORD=admin
+            - POSTGRES_DB=challenge
+        volumes:
+            - ./psqldata:/var/lib/postgresql/data:rw
+        restart: always
+        ports:
+            - "5432:5432"
+    application:
+        build: .
+        container_name: jsdc
+        volumes:
+            - ./application_data/input:/app/input/
+            - ./application_data/output:/app/output/
+        depends_on:
+            - postgres_test
+        restart: always
